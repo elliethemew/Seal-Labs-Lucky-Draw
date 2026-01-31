@@ -124,7 +124,7 @@ export function Receipt({ result }: ReceiptProps) {
                     className="absolute inset-0 pointer-events-none"
                     style={{
                         opacity: 0.03,
-                        backgroundImage: `url("/logo.png")`,
+                        backgroundImage: `url("${import.meta.env.BASE_URL}logo.png")`,
                         backgroundSize: '150px',
                         backgroundRepeat: 'repeat',
                         backgroundPosition: 'center',
@@ -264,7 +264,7 @@ export function Receipt({ result }: ReceiptProps) {
                     {/* Authenticity Footer */}
                     <div className="mt-8 opacity-60">
                         <img
-                            src="/logo.png"
+                            src={`${import.meta.env.BASE_URL}logo.png`}
                             className="w-5 h-auto mx-auto mb-2 opacity-50 grayscale"
                         />
                     </div>

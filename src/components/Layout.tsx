@@ -22,7 +22,7 @@ export function Layout({ children, className }: LayoutProps) {
                 <div
                     className="absolute inset-0 opacity-[0.04] mix-blend-overlay blur-[8px]"
                     style={{
-                        backgroundImage: `url("/logo.png")`,
+                        backgroundImage: `url("${import.meta.env.BASE_URL}logo.png")`,
                         backgroundSize: '120px',
                         backgroundRepeat: 'repeat',
                         transform: 'scale(1.2)'
@@ -60,7 +60,7 @@ export function Layout({ children, className }: LayoutProps) {
                     {/* Logo - Clickable Home Link */}
                     <a href="/" className="flex items-center hover:opacity-80 transition-opacity cursor-pointer">
                         <img
-                            src="/logo.png"
+                            src={`${import.meta.env.BASE_URL}logo.png`}
                             alt="Seal Labs"
                             className="h-6 w-auto object-contain transition-all duration-300"
                             style={{

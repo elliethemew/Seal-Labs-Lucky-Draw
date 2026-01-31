@@ -77,7 +77,7 @@ export function LuckyMoney() {
                         >
                             <div className="h-[400px] aspect-[363/680] rounded-lg relative flex items-center justify-center transition-all duration-300 shadow-xl group-hover:shadow-2xl overflow-hidden">
                                 <img
-                                    src="/envelope.png"
+                                    src={`${import.meta.env.BASE_URL}envelope.png`}
                                     alt="Lucky Envelope Front"
                                     className="absolute inset-0 w-full h-full object-cover object-top"
                                     onError={(e) => {
@@ -120,7 +120,7 @@ export function LuckyMoney() {
                         >
                             <div className="h-[400px] aspect-[363/680] rounded-lg relative flex items-center justify-center transition-all duration-300 shadow-xl group-hover:shadow-2xl overflow-hidden">
                                 <img
-                                    src="/envelope-back.png"
+                                    src={`${import.meta.env.BASE_URL}envelope-back.png`}
                                     alt="Lucky Envelope Back"
                                     className="absolute inset-0 w-full h-full object-cover object-top"
                                     onError={(e) => {
