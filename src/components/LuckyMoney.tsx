@@ -107,19 +107,19 @@ export function LuckyMoney() {
         <div className="w-full max-w-sm mx-auto">
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold font-display text-seal-gold mb-2">Claim Lucky Money</h2>
-                <p className="text-seal-cream/70 text-sm">Enter your Employee Code (e.g. SEAL01) to receive a random lucky envelope.</p>
+                <p className="text-seal-cream/70 text-sm">Enter your Company Email to receive a random lucky envelope.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="relative">
                     <input
-                        type="text"
-                        placeholder="SEAL01"
+                        type="email"
+                        placeholder="ellie@seallabs.xyz"
                         value={code}
-                        onChange={(e) => setCode(e.target.value.toUpperCase())}
+                        onChange={(e) => setCode(e.target.value)}
                         disabled={loading}
                         className={clsx(
-                            "w-full px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-seal-gold transition-all uppercase tracking-widest font-mono",
+                            "w-full px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-seal-gold transition-all font-mono",
                             error && "border-red-500 focus:ring-red-500"
                         )}
                     />
