@@ -9,8 +9,27 @@
   /* Ivory (text/highlights) */
   --color-seal-brown: #A56051;
   /* Warm brown-red */
-  --color-seal-gold: #FFD700;
+  --color-seal-gold: #DCA54A;
   /* Keep as tiny accent */
+
+  /* Layout & Sizing Tokens */
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 999px;
+  --container-width: 560px;
+
+  /* Surface & Depth Tokens */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  /* Premium subtle border */
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.25);
+  --shadow-btn: 0 10px 26px rgba(0, 0, 0, 0.22);
+  --focus-ring: 0 0 0 3px rgba(229, 198, 152, 0.18);
+  /* Ivory glow */
+
+  /* Motion Tokens */
+  --ease-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-hover: 180ms;
+  --duration-press: 120ms;
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -20,7 +39,6 @@
   font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -32,10 +50,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--color-seal-dark);
+  background-color: #240607;
+  /* Fallback matches bottom gradient */
   color: var(--color-seal-ivory);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-  background-repeat: repeat;
 }
 
 /* Typography Scale - Premium lock */
@@ -56,7 +73,6 @@ body {
 .type-body {
   font-size: 16px;
   font-weight: 400;
-  /* Regular */
   line-height: 1.5;
 }
 
@@ -67,18 +83,60 @@ body {
 }
 
 /* 3D Transform Utilities */
-.perspective-1000 {
-  perspective: 1000px;
+@layer utilities {
+  .perspective-1200 {
+    perspective: 1200px;
+    perspective-origin: 50% 50%;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
 }
 
-.preserve-3d {
-  transform-style: preserve-3d;
+/* Premium Flip Animation with Depth Pulse */
+@keyframes flipToBack {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotateY(90deg) scale(0.96);
+  }
+
+  /* Breathing Scale */
+  100% {
+    transform: rotateY(180deg) scale(1);
+  }
 }
 
-.backface-hidden {
-  backface-visibility: hidden;
+@keyframes flipToFront {
+  0% {
+    transform: rotateY(180deg) scale(1);
+  }
+
+  50% {
+    transform: rotateY(90deg) scale(0.96);
+  }
+
+  100% {
+    transform: rotateY(0deg) scale(1);
+  }
 }
 
-.rotate-y-180 {
-  transform: rotateY(180deg);
+.animate-flip-back {
+  animation: flipToBack 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-flip-front {
+  animation: flipToFront 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }

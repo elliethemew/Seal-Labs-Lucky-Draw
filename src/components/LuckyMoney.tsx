@@ -17,10 +17,15 @@ export function LuckyMoney() {
     useEffect(() => {
         if (stage === 'result' && result?.status === 'SUCCESS') {
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#FFD700', '#FF0000', '#FFFFFF'] // Gold, Red, White
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.65 },
+                gravity: 0.8, // Slower fall
+                scalar: 0.9,  // Smaller particles
+                ticks: 150,   // Shorter duration
+                drift: 0,
+                colors: ['#DCA54A', '#8C181B', '#E5C698'], // Gold, Red, Ivory
+                disableForReducedMotion: true
             });
         }
     }, [stage, result]);
@@ -144,9 +149,10 @@ export function LuckyMoney() {
                             <motion.p
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1, transition: { delay: 0.5 } }}
-                                className="text-seal-ivory/60 text-sm max-w-xs text-center"
+                                className="text-seal-ivory/60 text-[12px] uppercase text-center font-sans"
+                                style={{ letterSpacing: '0.15em' }}
                             >
-                                Or screenshot manually if sharing fails.
+                                Thank you for being part of Seal Labs.
                             </motion.p>
                         </motion.div>
                     )}

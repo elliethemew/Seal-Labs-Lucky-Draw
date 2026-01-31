@@ -21,23 +21,22 @@ export function Receipt({ result }: ReceiptProps) {
         if (!receiptRef.current) return;
         setCapturing(true);
         try {
+            // Wait for fonts/images to settle
+            await new Promise(resolve => setTimeout(resolve, 800));
+
             const canvas = await html2canvas(receiptRef.current, {
-                scale: 3,
-                backgroundColor: '#E5C698', // Seal Ivory
+                scale: 3, // Higher resolution for crisp text
+                backgroundColor: null,
                 logging: false,
                 useCORS: true,
+                allowTaint: true,
+                ignoreElements: (element) => element.hasAttribute('data-html2canvas-ignore')
             });
 
             canvas.toBlob(async (blob) => {
-                if (!blob) {
-                    alert("Failed to generate image.");
-                    setCapturing(false);
-                    return;
-                }
-
+                if (!blob) throw new Error("Canvas Blob is null");
                 const file = new File([blob], `seal-lucky-money-${result.employee_code || 'receipt'}.png`, { type: 'image/png' });
 
-                // Try native share first (Mobile)
                 if (navigator.share) {
                     try {
                         await navigator.share({
@@ -52,7 +51,6 @@ export function Receipt({ result }: ReceiptProps) {
                     }
                 }
 
-                // Fallback to Premium Modal (Desktop)
                 const url = URL.createObjectURL(blob);
                 setPreviewUrl(url);
                 setShowModal(true);
@@ -61,7 +59,7 @@ export function Receipt({ result }: ReceiptProps) {
 
         } catch (error: any) {
             console.error("Capture failed:", error);
-            alert("Error generating receipt.");
+            alert(`Error: ${error.message || "Could not generate image"}`);
             setCapturing(false);
         }
     };
@@ -84,10 +82,9 @@ export function Receipt({ result }: ReceiptProps) {
             await navigator.clipboard.write([
                 new ClipboardItem({ 'image/png': blob })
             ]);
-            alert("Copied to clipboard!");
+            alert("Copied!");
         } catch (err) {
             console.error("Copy failed", err);
-            alert("Failed to copy image.");
         }
     };
 
@@ -97,105 +94,180 @@ export function Receipt({ result }: ReceiptProps) {
         <>
             <div
                 ref={receiptRef}
-                className="w-[92vw] max-w-[520px] mx-auto p-6 rounded-2xl relative overflow-hidden"
+                className="w-[92vw] max-w-[480px] mx-auto rounded-2xl relative overflow-hidden"
                 style={{
-                    backgroundColor: '#E5C698', // Seal Ivory
-                    color: '#5E1213', // Seal Dark (Deep Red)
-                    border: '1px solid rgba(94, 18, 19, 0.1)',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                    // Material: Warm Ivory Paper (Realism)
+                    background: 'linear-gradient(180deg, #F5E6CF 0%, #EFD9B8 100%)',
+                    color: '#5E1213',
+                    // Depth: Triple Shadow + Inner Warm Stroke
+                    boxShadow: `
+                        0 20px 50px -10px rgba(0,0,0,0.35),
+                        0 0 0 1px rgba(255,255,255,0.4) inset,
+                        inset 0 0 0 1px rgba(94, 18, 19, 0.05)
+                    `,
+                    paddingTop: '64px',
+                    paddingBottom: '48px',
+                    paddingLeft: '32px',
+                    paddingRight: '32px',
                 }}
             >
-                <div className="absolute top-0 right-0 p-2 opacity-50">
-                    <span className="text-xs font-mono" style={{ color: '#5E1213' }}>SEAL LABS • 2026</span>
-                </div>
+                {/* Texture Overlay: Noise/Grain */}
+                <div
+                    className="absolute inset-0 pointer-events-none mix-blend-overlay"
+                    style={{
+                        opacity: 0.15,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                    }}
+                />
+                {/* Watermark Logo */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        opacity: 0.03,
+                        backgroundImage: `url("/logo.png")`,
+                        backgroundSize: '150px',
+                        backgroundRepeat: 'repeat',
+                        backgroundPosition: 'center',
 
-                {/* Stamp Effect */}
-                <motion.div
-                    initial={{ scale: 2, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                >
-                    <div
-                        className="w-48 h-48 rounded-full flex items-center justify-center -rotate-12"
-                        style={{ border: '6px solid rgba(140, 24, 27, 0.1)' }}
-                    >
-                        <span className="text-4xl font-black uppercase" style={{ color: 'rgba(140, 24, 27, 0.1)' }}>
-                            {result.status === 'ALREADY_CLAIMED' ? 'REISSUED' : 'APPROVED'}
+                    }}
+                />
+
+                {/* Header Section */}
+                <div className="relative z-10 text-center pt-6">
+                    {/* Authority Eyebrow */}
+                    <div className="mb-6 flex justify-center opacity-60">
+                        <span
+                            className="text-[10px] font-mono uppercase tracking-[0.25em]"
+                            style={{ color: '#5E1213' }}
+                        >
+                            OFFICIAL RECEIPT • VERIFIED • 2026
                         </span>
                     </div>
-                </motion.div>
 
-                <div className="text-center mb-6 pt-4">
+                    {/* Tier Icon */}
                     {tier.icon && (
                         <div
-                            className="w-16 h-16 mx-auto rounded-full flex items-center justify-center font-bold text-3xl mb-2 shadow-sm"
-                            style={{ backgroundColor: '#5E1213', color: '#E5C698' }}
+                            className="w-12 h-12 mx-auto rounded-full flex items-center justify-center font-bold text-xl mb-4 shadow-sm relative overflow-hidden"
+                            style={{
+                                backgroundColor: '#5E1213',
+                                color: '#E5C698',
+                                border: '1px solid rgba(94, 18, 19, 0.2)'
+                            }}
                         >
+                            <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
                             {tier.icon}
                         </div>
                     )}
-                    <h3 className="type-h2 uppercase tracking-widest px-2 leading-tight" style={{ color: '#5E1213' }}>
+
+                    {/* Title: Premium / Clean */}
+                    <h3 className="type-h2 uppercase tracking-[0.2em] mb-4 text-base font-bold opacity-90" style={{ color: '#5E1213' }}>
                         {tier.title}
                     </h3>
-                    <p className="type-caption italic mt-1 px-4 opacity-80" style={{ color: '#5E1213' }}>
-                        "{tier.message}"
-                    </p>
-                </div>
 
-                <div className="space-y-4 pt-6" style={{ borderTop: '1px dashed rgba(94, 18, 19, 0.2)' }}>
-                    <div className="flex justify-between items-baseline">
-                        <span className="text-sm opacity-70" style={{ color: '#5E1213' }}>Code</span>
-                        <span className="font-bold break-all font-mono" style={{ color: '#5E1213' }}>{result.employee_code || result.email}</span>
+                    {/* Divider: Clean Separator */}
+                    <div className="flex justify-center mb-6 opacity-30">
+                        <div style={{ width: '32px', height: '1px', backgroundColor: '#5E1213' }} />
                     </div>
 
-                    <div className="flex justify-between items-baseline">
-                        <span className="text-sm opacity-70" style={{ color: '#5E1213' }}>Amount</span>
-                        <span className="font-display font-bold text-3xl tabular-nums" style={{ color: '#8C181B' }}>
-                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result.amount)}
-                        </span>
-                    </div>
-
-                    <div className="flex justify-between items-baseline">
-                        <span className="text-xs opacity-70" style={{ color: '#5E1213' }}>Receipt ID</span>
-                        <span className="font-mono text-xs opacity-70" style={{ color: '#5E1213' }}>{result.receipt_id}</span>
-                    </div>
-
-                    <div className="flex justify-between items-baseline">
-                        <span className="text-xs opacity-70" style={{ color: '#5E1213' }}>Time</span>
-                        <span className="font-mono text-xs opacity-70" style={{ color: '#5E1213' }}>
-                            {new Date(result.timestamp).toLocaleString()}
-                        </span>
+                    {/* Quote: No Label, Just Text */}
+                    <div className="flex justify-center mb-8">
+                        <p className="font-serif italic text-sm opacity-80 max-w-[90%] leading-relaxed" style={{ color: '#5E1213' }}>
+                            "{tier.message}"
+                        </p>
                     </div>
                 </div>
 
-                <div className="mt-8 pt-4 text-center" style={{ borderTop: '1px solid rgba(94, 18, 19, 0.1)' }}>
+                {/* Main Content Area */}
+                <div className="relative z-10">
+                    {/* Hero Amount */}
+                    <div className="text-center py-2 mb-10 relative">
+                        <span className="block text-[9px] uppercase tracking-[0.25em] opacity-50 mb-3 font-bold" style={{ color: '#5E1213' }}>Verified Amount</span>
+
+                        <div
+                            className="font-display font-bold text-6xl tracking-tighter leading-none relative z-10 flex items-baseline justify-center gap-1"
+                            style={{
+                                color: '#8C181B',
+                                fontVariantNumeric: 'tabular-nums',
+                                textShadow: '0 2px 0 rgba(229, 198, 152, 0.5)'
+                            }}
+                        >
+                            {/* International Friendly: Comma Separator */}
+                            {new Intl.NumberFormat('en-US').format(result.amount)}
+                            <span
+                                className="font-serif font-normal opacity-80 relative -top-0.5"
+                                style={{ fontSize: '0.5em' }}
+                            >
+                                đ
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Security Feature: Tighter Microprint */}
+                    <div className="w-full mb-8 opacity-40 select-none relative">
+                        <div style={{ height: '1px', backgroundColor: '#5E1213', opacity: 0.25, marginBottom: '2px' }} />
+                        <div className="text-[4px] font-mono whitespace-nowrap tracking-[0.15em] text-center uppercase" style={{ color: '#5E1213' }}>
+                            SEAL LABS • AUTHENTICATED • RECEIPT HASH • 2026 •
+                        </div>
+                    </div>
+
+                    {/* Metadata Grid: More spacing, Lighter weights */}
+                    <div className="grid grid-cols-[100px_1fr] gap-y-4 px-4 text-left items-baseline">
+
+                        <span className="text-[10px] uppercase tracking-[0.2em] opacity-50" style={{ color: '#5E1213' }}>Recipient</span>
+                        <span className="text-sm font-light opacity-80 text-right font-mono leading-relaxed" style={{ color: '#5E1213' }}>{result.employee_code || result.email}</span>
+
+                        <span className="text-[10px] uppercase tracking-[0.2em] opacity-50" style={{ color: '#5E1213' }}>Receipt ID</span>
+                        <span className="text-xs opacity-80 text-right font-mono tracking-wide leading-relaxed" style={{ color: '#5E1213' }}>{result.receipt_id}</span>
+
+                        <span className="text-[10px] uppercase tracking-[0.2em] opacity-50" style={{ color: '#5E1213' }}>Time</span>
+                        <span className="text-xs opacity-80 text-right font-mono tracking-wide leading-relaxed" style={{ color: '#5E1213' }}>{new Date(result.timestamp).toLocaleString()}</span>
+
+                    </div>
+                </div>
+
+                {/* Footer Action */}
+                <div className="relative z-10 text-center mt-10">
                     <button
                         onClick={handleShare}
                         disabled={capturing}
-                        className="w-full py-3 font-bold rounded-lg transition-all flex items-center justify-center gap-2 hover:opacity-90"
+                        className="group w-full rounded-xl transition-all flex items-center justify-center gap-3 relative overflow-hidden"
                         style={{
-                            backgroundColor: '#5E1213',
+                            // Premium Button: Flatter, Tactile, Inset Highlight
+                            background: 'linear-gradient(to bottom, #5E1213, #4a0e0f)',
                             color: '#E5C698',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                            boxShadow: `
+                                0 4px 12px rgba(0,0,0,0.15), 
+                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+                            `,
+                            fontSize: '12px',
+                            letterSpacing: '0.15em',
+                            paddingTop: '14px',
+                            paddingBottom: '14px'
                         }}
                         data-html2canvas-ignore
                     >
-                        {capturing ? 'Preparing...' : (
-                            <>
-                                <Share2 className="w-4 h-4" /> Share Receipt
-                            </>
-                        )}
+                        {/* Hover Motion Wrapper */}
+                        <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                        <span className="relative flex items-center gap-3 transition-transform duration-200 group-hover:-translate-y-px group-active:translate-y-px">
+                            {capturing ? (
+                                <span className="animate-pulse">Processing...</span>
+                            ) : (
+                                <>
+                                    <Share2 className="w-3 h-3 opacity-90" />
+                                    <span className="uppercase">Share Receipt</span>
+                                </>
+                            )}
+                        </span>
                     </button>
-                    <p className="mt-2 text-[10px] opacity-60 font-mono" style={{ color: '#5E1213' }}>
-                        ID: {result.receipt_id}
-                    </p>
-                    <div
-                        className="w-full h-2 rounded-full mt-4"
-                        style={{
-                            background: 'linear-gradient(to right, #5E1213, #8C181B, #5E1213)',
-                            opacity: 0.1
-                        }}
-                    />
+
+                    {/* Authenticity Footer */}
+                    <div className="mt-8 opacity-60">
+                        <img
+                            src="/logo.png"
+                            className="w-5 h-auto mx-auto mb-2 opacity-50 grayscale"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -232,10 +304,10 @@ export function Receipt({ result }: ReceiptProps) {
                             >
                                 <Download className="w-4 h-4" /> Download Image
                             </button>
-                            {/* Copy is supported on most modern desktop browsers */}
                             <button
                                 onClick={handleCopy}
-                                className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
+                                className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-seal-dark font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
+                                style={{ backgroundColor: '#F3F4F6', color: '#374151' }}
                             >
                                 Copy to Clipboard
                             </button>
