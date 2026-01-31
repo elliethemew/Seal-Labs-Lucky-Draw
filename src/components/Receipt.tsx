@@ -3,6 +3,7 @@ import { Share2, Download } from 'lucide-react';
 import type { ClaimResult } from '../api/client';
 import html2canvas from 'html2canvas';
 import { useRef, useState } from 'react';
+import { getTier } from '../data/tiers';
 
 interface ReceiptProps {
     result: ClaimResult;
@@ -10,6 +11,7 @@ interface ReceiptProps {
 
 export function Receipt({ result }: ReceiptProps) {
     const isSuccess = result.status === 'SUCCESS' || result.status === 'ALREADY_CLAIMED';
+    const tier = getTier(result.amount);
     const receiptRef = useRef<HTMLDivElement>(null);
     const [capturing, setCapturing] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -21,7 +23,7 @@ export function Receipt({ result }: ReceiptProps) {
         try {
             const canvas = await html2canvas(receiptRef.current, {
                 scale: 3,
-                backgroundColor: '#FDFBF7',
+                backgroundColor: '#E5C698', // Seal Ivory
                 logging: false,
                 useCORS: true,
             });
@@ -95,16 +97,16 @@ export function Receipt({ result }: ReceiptProps) {
         <>
             <div
                 ref={receiptRef}
-                className="w-full max-w-sm mx-auto p-6 rounded-lg relative overflow-hidden"
+                className="w-[92vw] max-w-[520px] mx-auto p-6 rounded-2xl relative overflow-hidden"
                 style={{
-                    backgroundColor: '#FAF9F6',
-                    color: '#1A0F0F',
-                    border: '4px solid rgba(255, 215, 0, 0.5)',
+                    backgroundColor: '#E5C698', // Seal Ivory
+                    color: '#5E1213', // Seal Dark (Deep Red)
+                    border: '1px solid rgba(94, 18, 19, 0.1)',
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
                 }}
             >
                 <div className="absolute top-0 right-0 p-2 opacity-50">
-                    <span className="text-xs font-mono" style={{ color: '#9CA3AF' }}>SEAL LABS • 2026</span>
+                    <span className="text-xs font-mono" style={{ color: '#5E1213' }}>SEAL LABS • 2026</span>
                 </div>
 
                 {/* Stamp Effect */}
@@ -115,9 +117,9 @@ export function Receipt({ result }: ReceiptProps) {
                 >
                     <div
                         className="w-48 h-48 rounded-full flex items-center justify-center -rotate-12"
-                        style={{ border: '6px solid rgba(239, 68, 68, 0.2)' }}
+                        style={{ border: '6px solid rgba(140, 24, 27, 0.1)' }}
                     >
-                        <span className="text-4xl font-black uppercase" style={{ color: 'rgba(239, 68, 68, 0.2)' }}>
+                        <span className="text-4xl font-black uppercase" style={{ color: 'rgba(140, 24, 27, 0.1)' }}>
                             {result.status === 'ALREADY_CLAIMED' ? 'REISSUED' : 'APPROVED'}
                         </span>
                     </div>
@@ -125,49 +127,53 @@ export function Receipt({ result }: ReceiptProps) {
 
                 <div className="text-center mb-6 pt-4">
                     <div
-                        className="w-16 h-16 mx-auto rounded-full flex items-center justify-center font-bold text-2xl mb-2"
-                        style={{ backgroundColor: '#D9381E', color: '#FFD700', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+                        className="w-16 h-16 mx-auto rounded-full flex items-center justify-center font-bold text-3xl mb-2 shadow-sm"
+                        style={{ backgroundColor: '#5E1213', color: '#E5C698' }}
                     >
-                        🧧
+                        {tier.icon}
                     </div>
-                    <h3 className="text-lg font-bold uppercase tracking-widest" style={{ color: '#6B7280' }}>Lucky Money Receipt</h3>
-                    <p className="text-sm" style={{ color: '#9CA3AF' }}>Official Allocation</p>
+                    <h3 className="type-h2 uppercase tracking-widest px-2 leading-tight" style={{ color: '#5E1213' }}>
+                        {tier.title}
+                    </h3>
+                    <p className="type-caption italic mt-1 px-4 opacity-80" style={{ color: '#5E1213' }}>
+                        "{tier.message}"
+                    </p>
                 </div>
 
-                <div className="space-y-4 pt-6" style={{ borderTop: '1px dashed #D1D5DB' }}>
+                <div className="space-y-4 pt-6" style={{ borderTop: '1px dashed rgba(94, 18, 19, 0.2)' }}>
                     <div className="flex justify-between items-baseline">
-                        <span className="text-sm" style={{ color: '#6B7280' }}>Code</span>
-                        <span className="font-bold break-all" style={{ color: '#1A0F0F' }}>{result.employee_code || result.email}</span>
+                        <span className="text-sm opacity-70" style={{ color: '#5E1213' }}>Code</span>
+                        <span className="font-bold break-all font-mono" style={{ color: '#5E1213' }}>{result.employee_code || result.email}</span>
                     </div>
 
                     <div className="flex justify-between items-baseline">
-                        <span className="text-sm" style={{ color: '#6B7280' }}>Amount</span>
-                        <span className="font-display font-bold text-3xl" style={{ color: '#D9381E' }}>
+                        <span className="text-sm opacity-70" style={{ color: '#5E1213' }}>Amount</span>
+                        <span className="font-display font-bold text-3xl tabular-nums" style={{ color: '#8C181B' }}>
                             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result.amount)}
                         </span>
                     </div>
 
                     <div className="flex justify-between items-baseline">
-                        <span className="text-xs" style={{ color: '#6B7280' }}>Receipt ID</span>
-                        <span className="font-mono text-xs" style={{ color: '#9CA3AF' }}>{result.receipt_id}</span>
+                        <span className="text-xs opacity-70" style={{ color: '#5E1213' }}>Receipt ID</span>
+                        <span className="font-mono text-xs opacity-70" style={{ color: '#5E1213' }}>{result.receipt_id}</span>
                     </div>
 
                     <div className="flex justify-between items-baseline">
-                        <span className="text-xs" style={{ color: '#6B7280' }}>Time</span>
-                        <span className="font-mono text-xs" style={{ color: '#9CA3AF' }}>
+                        <span className="text-xs opacity-70" style={{ color: '#5E1213' }}>Time</span>
+                        <span className="font-mono text-xs opacity-70" style={{ color: '#5E1213' }}>
                             {new Date(result.timestamp).toLocaleString()}
                         </span>
                     </div>
                 </div>
 
-                <div className="mt-8 pt-4 text-center" style={{ borderTop: '1px solid #E5E7EB' }}>
+                <div className="mt-8 pt-4 text-center" style={{ borderTop: '1px solid rgba(94, 18, 19, 0.1)' }}>
                     <button
                         onClick={handleShare}
                         disabled={capturing}
-                        className="w-full py-2 font-bold rounded-lg transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3 font-bold rounded-lg transition-all flex items-center justify-center gap-2 hover:opacity-90"
                         style={{
-                            backgroundColor: '#FFD700',
-                            color: '#1A0F0F',
+                            backgroundColor: '#5E1213',
+                            color: '#E5C698',
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}
                         data-html2canvas-ignore
@@ -178,14 +184,14 @@ export function Receipt({ result }: ReceiptProps) {
                             </>
                         )}
                     </button>
-                    <p className="mt-2 text-[10px]" style={{ color: '#9CA3AF' }}>
+                    <p className="mt-2 text-[10px] opacity-60 font-mono" style={{ color: '#5E1213' }}>
                         ID: {result.receipt_id}
                     </p>
                     <div
                         className="w-full h-2 rounded-full mt-4"
                         style={{
-                            background: 'linear-gradient(to right, #D9381E, #FFD700, #D9381E)',
-                            opacity: 0.2
+                            background: 'linear-gradient(to right, #5E1213, #8C181B, #5E1213)',
+                            opacity: 0.1
                         }}
                     />
                 </div>

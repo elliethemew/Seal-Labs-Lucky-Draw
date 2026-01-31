@@ -48,7 +48,7 @@ export function FortuneCard({ onDraw }: FortuneCardProps) {
 
                 {/* Back of Card (The Content - White/Cream style) */}
                 <div
-                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden shadow-2xl bg-seal-cream text-seal-dark flex flex-col items-center justify-center p-8 text-center"
+                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden shadow-2xl bg-seal-ivory text-seal-dark flex flex-col items-center justify-center p-8 text-center"
                     style={{ transform: "rotateY(180deg)" }}
                 >
                     {fortune && (
@@ -60,10 +60,10 @@ export function FortuneCard({ onDraw }: FortuneCardProps) {
                                 {fortune.type === 'career' && '🚀'}
                                 {fortune.type === 'general' && '✨'}
                             </div>
-                            <h4 className="text-sm font-bold text-seal-red uppercase tracking-wider mb-4 opacity-70">
+                            <h4 className="type-caption font-bold text-seal-red uppercase tracking-wider mb-4 opacity-70">
                                 {fortune.type}
                             </h4>
-                            <p className="text-2xl font-display font-bold text-seal-dark leading-relaxed">
+                            <p className="text-2xl font-bold text-seal-dark leading-relaxed tracking-tight">
                                 "{fortune.message}"
                             </p>
 

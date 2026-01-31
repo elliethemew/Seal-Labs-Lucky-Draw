@@ -104,13 +104,16 @@ export function LuckyMoney() {
     }
 
     return (
-        <div className="w-full max-w-sm mx-auto">
-            <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold font-display text-seal-gold mb-2">Claim Lucky Money</h2>
-                <p className="text-seal-cream/70 text-sm">Enter your Company Email to receive a random lucky envelope.</p>
+        <div className="w-[92vw] max-w-[520px] mx-auto">
+            <div className="text-center mb-5">
+                <h2 className="type-h2 text-seal-ivory mb-1.5">Lì Xì</h2>
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-seal-ivory/5 text-seal-ivory/50 text-[10px] uppercase font-bold tracking-[0.15em] mb-4 border border-seal-ivory/10">
+                    One Claim
+                </span>
+                <p className="type-body text-seal-ivory/90 text-sm">Enter your company email to open your envelope.</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="relative">
                     <input
                         type="email"
@@ -119,13 +122,13 @@ export function LuckyMoney() {
                         onChange={(e) => setCode(e.target.value)}
                         disabled={loading}
                         className={clsx(
-                            "w-full px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-seal-gold transition-all font-mono",
+                            "w-full px-6 py-5 rounded-2xl bg-white/5 border border-seal-ivory/30 text-seal-ivory placeholder-seal-ivory/20 focus:outline-none focus:border-seal-ivory/50 focus:shadow-[0_0_20px_rgba(229,198,152,0.1)] transition-all font-sans",
                             error && "border-red-500 focus:ring-red-500"
                         )}
                     />
                     {loading && (
                         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                            <Loader2 className="w-5 h-5 animate-spin text-seal-gold" />
+                            <Loader2 className="w-5 h-5 animate-spin text-seal-ivory" />
                         </div>
                     )}
                 </div>
@@ -143,7 +146,7 @@ export function LuckyMoney() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-seal-gold to-yellow-500 text-seal-dark font-bold text-lg shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-5 rounded-2xl bg-seal-ivory text-seal-dark font-bold text-lg shadow-xl hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     {loading ? 'Checking...' : 'Open Envelope'} <Send className="w-4 h-4" />
                 </button>

@@ -7,22 +7,35 @@ interface LayoutProps {
 
 export function Layout({ children, className }: LayoutProps) {
     return (
-        <div className="relative min-h-screen w-full overflow-x-hidden bg-seal-dark text-seal-cream font-sans selection:bg-seal-red selection:text-white">
+        <div className="relative min-h-screen w-full overflow-x-hidden bg-seal-dark text-seal-ivory font-sans selection:bg-seal-red selection:text-white">
             {/* Background Pattern - subtle grandeur */}
             <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--color-seal-red)_0%,_transparent_50%)] blur-[100px]" />
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
             </div>
 
-            {/* Header */}
-            <header className="relative z-10 w-full p-6 flex justify-between items-center bg-gradient-to-b from-seal-dark/80 to-transparent backdrop-blur-[2px]">
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-seal-red rounded-full flex items-center justify-center border border-seal-gold shadow-[0_0_10px_rgba(255,215,0,0.3)]">
-                        <span className="text-seal-gold font-bold text-xs">SL</span>
-                    </div>
-                    <h1 className="text-xl font-display font-bold tracking-wide text-seal-gold">
-                        Seal Labs <span className="text-seal-cream/80 font-light">Lunar New Year</span>
-                    </h1>
+            <header className="relative z-10 w-full px-8 py-6 md:px-10 flex justify-between items-center max-w-7xl mx-auto opacity-90">
+                <div className="flex items-center">
+                    {/* Logo - Premium Tiny Size (20px) + Ivory Tint */}
+                    <img
+                        src="/logo.png"
+                        alt="Seal Labs"
+                        className="h-5 w-auto object-contain transition-all duration-300 group-hover:brightness-100"
+                        style={{
+                            filter: 'brightness(0) saturate(100%) invert(84%) sepia(26%) saturate(608%) hue-rotate(322deg) brightness(98%) contrast(90%)' // Forces Ivory #E5C698
+                        }}
+                        onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.querySelector('.logo-fallback')!.classList.remove('hidden');
+                        }}
+                    />
+                    <span className="logo-fallback hidden font-bold text-sm tracking-widest text-seal-ivory">SEAL LABS</span>
+
+                    <div className="h-3 w-px bg-seal-ivory/20 mx-4" />
+
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-seal-ivory/70 font-medium pt-0.5">
+                        LUNAR NEW YEAR
+                    </span>
                 </div>
             </header>
 
@@ -32,7 +45,7 @@ export function Layout({ children, className }: LayoutProps) {
             </main>
 
             {/* Footer */}
-            <footer className="relative z-10 w-full py-8 text-center text-seal-cream/40 text-sm">
+            <footer className="relative z-10 w-full py-8 text-center text-seal-ivory/40 text-xs tracking-wider">
                 <p>© 2026 Seal Labs. Chuc Mung Nam Moi!</p>
             </footer>
         </div>
