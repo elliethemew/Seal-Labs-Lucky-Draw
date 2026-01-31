@@ -70,7 +70,7 @@ export function LuckyMoney() {
                             whileHover={{ scale: 1.05, rotate: [-1, 1, -1] }}
                             transition={{ type: "spring", stiffness: 200, damping: 20 }}
                         >
-                            <div className="w-64 h-80 bg-gradient-to-br from-red-600 to-red-800 rounded-lg shadow-2xl relative flex items-center justify-center border-2 border-seal-gold ring-4 ring-red-900 overflow-hidden transform-gpu">
+                            <div className="w-64 h-80 bg-gradient-to-br from-seal-red to-seal-dark rounded-lg shadow-2xl relative flex items-center justify-center border-2 border-seal-gold ring-4 ring-seal-dark overflow-hidden transform-gpu">
                                 {/* Envelope Pattern */}
                                 <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/shattered-island.png')]"></div>
 
@@ -92,7 +92,7 @@ export function LuckyMoney() {
                             <motion.p
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1, transition: { delay: 1 } }}
-                                className="text-seal-cream/60 text-sm max-w-xs text-center"
+                                className="text-seal-ivory/60 text-sm max-w-xs text-center"
                             >
                                 Or screenshot manually if sharing fails.
                             </motion.p>
