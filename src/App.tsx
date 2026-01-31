@@ -13,18 +13,12 @@ function App() {
     <Layout>
       {view === 'landing' && (
         <div className="flex flex-col gap-8 items-center justify-center min-h-[60vh]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center space-y-4 mb-4"
-          >
-            <h2 className="type-h1 text-seal-ivory">
-              Xuân 2026
-            </h2>
-            <p className="type-body text-seal-ivory/70 font-light tracking-wide">Pick your luck for the Year of the Horse.</p>
-          </motion.div>
+          <div className="text-center mb-12">
+            <h1 className="type-h1 text-seal-ivory mb-3">Lunar New Year 2026</h1>
+            <p className="type-body text-seal-ivory/70 font-light tracking-wide">Pick your luck for the Year of the Horse</p>
+          </div>
 
-          <div className="grid gap-4 w-[92vw] max-w-[520px]">
+          <div className="grid gap-4 w-[92vw] max-w-[560px]">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -34,13 +28,13 @@ function App() {
               <div className="flex flex-col items-start gap-1">
                 <div className="flex items-center gap-3 mb-1">
                   <span className="type-h2 flex items-center gap-2 tracking-tight">
-                    <Dices className="text-seal-red w-5 h-5" /> Gieo Quẻ
+                    <Dices className="text-seal-red w-5 h-5" /> Fortune Draw
                   </span>
-                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-seal-dark/5 text-seal-dark/50 text-[10px] uppercase font-bold tracking-[0.15em] border border-seal-dark/10">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-seal-dark/5 text-seal-dark/40 text-[9px] uppercase font-bold tracking-[0.2em] border border-seal-dark/10">
                     Unlimited
                   </span>
                 </div>
-                <span className="type-caption text-seal-dark/70 font-medium">Fortune Draw</span>
+                <span className="type-caption text-seal-dark/60 font-medium tracking-wide">Gieo Quẻ</span>
               </div>
               <Sparkles className="w-5 h-5 text-seal-red/40 group-hover:text-seal-red transition-colors" />
             </motion.button>
@@ -54,13 +48,13 @@ function App() {
               <div className="flex flex-col items-start gap-1">
                 <div className="flex items-center gap-3 mb-1">
                   <span className="type-h2 flex items-center gap-2 tracking-tight">
-                    <MailOpen className="w-5 h-5" /> Lì Xì
+                    <MailOpen className="w-5 h-5" /> Lucky Money
                   </span>
-                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-seal-ivory/5 group-hover:bg-seal-dark/5 text-seal-ivory/50 group-hover:text-seal-dark/50 text-[10px] uppercase font-bold tracking-[0.15em] border border-seal-ivory/10 group-hover:border-seal-dark/10 transition-colors">
-                    One claim
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-seal-ivory/5 group-hover:bg-seal-dark/5 text-seal-ivory/40 group-hover:text-seal-dark/40 text-[9px] uppercase font-bold tracking-[0.2em] border border-seal-ivory/10 group-hover:border-seal-dark/10 transition-colors">
+                    One Claim
                   </span>
                 </div>
-                <span className="type-caption opacity-70 group-hover:opacity-100 group-hover:text-seal-dark/70 font-medium transition-opacity">Lucky Money</span>
+                <span className="type-caption opacity-60 group-hover:opacity-100 group-hover:text-seal-dark/60 font-medium tracking-wide transition-opacity">Lì Xì</span>
               </div>
               <div className="w-8 h-8 rounded-full border border-current flex items-center justify-center opacity-40 group-hover:opacity-100 transition-opacity">
                 <span className="font-bold text-sm">$</span>

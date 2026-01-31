@@ -14,13 +14,13 @@ export function Layout({ children, className }: LayoutProps) {
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
             </div>
 
-            <header className="relative z-10 w-full px-8 py-6 md:px-10 flex justify-between items-center max-w-7xl mx-auto opacity-90">
+            <header className="relative z-10 w-full px-8 py-8 md:px-10 flex justify-between items-center max-w-7xl mx-auto opacity-90">
                 <div className="flex items-center">
-                    {/* Logo - Premium Tiny Size (20px) + Ivory Tint */}
+                    {/* Logo - Premium Tiny Size (24px) + Ivory Tint */}
                     <img
                         src="/logo.png"
                         alt="Seal Labs"
-                        className="h-5 w-auto object-contain transition-all duration-300 group-hover:brightness-100"
+                        className="h-6 w-auto object-contain transition-all duration-300 group-hover:brightness-100"
                         style={{
                             filter: 'brightness(0) saturate(100%) invert(84%) sepia(26%) saturate(608%) hue-rotate(322deg) brightness(98%) contrast(90%)' // Forces Ivory #E5C698
                         }}
@@ -45,8 +45,8 @@ export function Layout({ children, className }: LayoutProps) {
             </main>
 
             {/* Footer */}
-            <footer className="relative z-10 w-full py-8 text-center text-seal-ivory/40 text-xs tracking-wider">
-                <p>© 2026 Seal Labs. Chuc Mung Nam Moi!</p>
+            <footer className="relative z-10 w-full p-6 text-center opacity-40">
+                <p className="type-caption text-xs tracking-widest text-seal-ivory">© 2026 Seal Labs. Happy Lunar New Year!</p>
             </footer>
         </div>
     );

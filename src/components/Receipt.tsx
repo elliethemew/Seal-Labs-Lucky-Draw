@@ -126,12 +126,14 @@ export function Receipt({ result }: ReceiptProps) {
                 </motion.div>
 
                 <div className="text-center mb-6 pt-4">
-                    <div
-                        className="w-16 h-16 mx-auto rounded-full flex items-center justify-center font-bold text-3xl mb-2 shadow-sm"
-                        style={{ backgroundColor: '#5E1213', color: '#E5C698' }}
-                    >
-                        {tier.icon}
-                    </div>
+                    {tier.icon && (
+                        <div
+                            className="w-16 h-16 mx-auto rounded-full flex items-center justify-center font-bold text-3xl mb-2 shadow-sm"
+                            style={{ backgroundColor: '#5E1213', color: '#E5C698' }}
+                        >
+                            {tier.icon}
+                        </div>
+                    )}
                     <h3 className="type-h2 uppercase tracking-widest px-2 leading-tight" style={{ color: '#5E1213' }}>
                         {tier.title}
                     </h3>

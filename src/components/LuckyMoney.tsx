@@ -156,16 +156,16 @@ export function LuckyMoney() {
     }
 
     return (
-        <div className="w-[92vw] max-w-[520px] mx-auto">
-            <div className="text-center mb-5">
-                <h2 className="type-h2 text-seal-ivory mb-1.5">Lì Xì</h2>
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-seal-ivory/5 text-seal-ivory/50 text-[10px] uppercase font-bold tracking-[0.15em] mb-4 border border-seal-ivory/10">
-                    One Claim
+        <div className="w-[92vw] max-w-[560px] mx-auto">
+            <div className="text-center mb-6">
+                <h2 className="type-h2 text-seal-ivory mb-1">Lucky Money</h2>
+                <span className="inline-block px-2 py-0.5 rounded-full bg-seal-ivory/5 text-seal-ivory/40 text-[9px] uppercase font-bold tracking-[0.2em] mb-4 border border-seal-ivory/10">
+                    Lì Xì
                 </span>
                 <p className="type-body text-seal-ivory/90 text-sm">Enter your company email to open your envelope.</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="relative">
                     <input
                         type="email"
@@ -174,7 +174,7 @@ export function LuckyMoney() {
                         onChange={(e) => setCode(e.target.value)}
                         disabled={loading}
                         className={clsx(
-                            "w-full px-6 py-5 rounded-2xl bg-white/5 border border-seal-ivory/30 text-seal-ivory placeholder-seal-ivory/20 focus:outline-none focus:border-seal-ivory/50 focus:shadow-[0_0_20px_rgba(229,198,152,0.1)] transition-all font-sans",
+                            "w-full px-6 h-12 rounded-2xl bg-white/5 border border-seal-ivory/30 text-seal-ivory placeholder-seal-ivory/40 focus:outline-none focus:border-seal-ivory/50 focus:shadow-[0_0_20px_rgba(229,198,152,0.1)] transition-all font-sans",
                             error && "border-red-500 focus:ring-red-500"
                         )}
                     />
@@ -198,7 +198,7 @@ export function LuckyMoney() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-5 rounded-2xl bg-seal-ivory text-seal-dark font-bold text-lg shadow-xl hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full h-14 rounded-2xl bg-seal-ivory text-seal-dark font-bold text-lg shadow-xl hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     {loading ? 'Checking...' : 'Open Envelope'} <Send className="w-4 h-4" />
                 </button>
@@ -206,3 +206,4 @@ export function LuckyMoney() {
         </div>
     );
 }
+
