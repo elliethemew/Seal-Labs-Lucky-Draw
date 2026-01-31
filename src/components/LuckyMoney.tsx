@@ -12,10 +12,10 @@ export function LuckyMoney() {
     const [result, setResult] = useState<ClaimResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [showEnvelope, setShowEnvelope] = useState(false);
-    const [isRevealed, setIsRevealed] = useState(false);
+    const [stage, setStage] = useState<'front' | 'back' | 'result'>('front');
 
     useEffect(() => {
-        if (isRevealed && result?.status === 'SUCCESS') {
+        if (stage === 'result' && result?.status === 'SUCCESS') {
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -23,7 +23,7 @@ export function LuckyMoney() {
                 colors: ['#FFD700', '#FF0000', '#FFFFFF'] // Gold, Red, White
             });
         }
-    }, [isRevealed, result]);
+    }, [stage, result]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,7 +40,7 @@ export function LuckyMoney() {
             if (res.status === 'SUCCESS' || res.status === 'ALREADY_CLAIMED') {
                 setResult(res);
                 setShowEnvelope(true);
-                setIsRevealed(false);
+                setStage('front');
             } else {
                 setError(res.message || "Something went wrong.");
             }
@@ -51,47 +51,99 @@ export function LuckyMoney() {
         }
     };
 
-    const handleReveal = () => {
-        setIsRevealed(true);
-    };
-
     if (result && showEnvelope) {
         return (
             <div className="flex flex-col items-center justify-center w-full min-h-[400px]">
                 <AnimatePresence mode="wait">
-                    {!isRevealed ? (
+                    {stage === 'front' ? (
                         <motion.div
-                            key="envelope"
+                            key="front"
                             initial={{ opacity: 0, scale: 0.5, y: 50 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 1.5, rotateY: 180 }}
-                            className="cursor-pointer"
-                            onClick={handleReveal}
+                            exit={{
+                                rotateY: 90,
+                                opacity: 0,
+                                scale: 0.9,
+                                transition: { duration: 0.3, ease: "easeIn" }
+                            }}
+                            className="cursor-pointer perspective-1000"
+                            onClick={() => setStage('back')}
                             whileHover={{ scale: 1.05, rotate: [-1, 1, -1] }}
-                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
                         >
-                            <div className="w-64 h-80 bg-gradient-to-br from-seal-red to-seal-dark rounded-lg shadow-2xl relative flex items-center justify-center border-2 border-seal-gold ring-4 ring-seal-dark overflow-hidden transform-gpu">
-                                {/* Envelope Pattern */}
-                                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/shattered-island.png')]"></div>
+                            <div className="h-[400px] aspect-[363/680] rounded-lg relative flex items-center justify-center transition-all duration-300 shadow-xl group-hover:shadow-2xl overflow-hidden">
+                                <img
+                                    src="/envelope.png"
+                                    alt="Lucky Envelope Front"
+                                    className="absolute inset-0 w-full h-full object-cover object-top"
+                                    onError={(e) => {
+                                        // Fallback to CSS style if image is missing
+                                        e.currentTarget.style.display = 'none';
+                                        e.currentTarget.parentElement!.classList.add('w-64', 'bg-gradient-to-br', 'from-seal-red', 'to-seal-dark', 'border-2', 'border-seal-gold');
+                                        e.currentTarget.parentElement!.querySelector('.envelope-fallback')!.classList.remove('hidden');
+                                    }}
+                                />
 
-                                <div className="text-center z-10 text-seal-gold">
-                                    <div className="text-6xl mb-4 animate-bounce">🧧</div>
-                                    <p className="font-display font-bold text-xl uppercase tracking-widest">Tap to Open</p>
+                                {/* Fallback Content (Hidden by default, shows on error) */}
+                                <div className="envelope-fallback hidden absolute inset-0 w-full h-full flex flex-col items-center justify-center">
+                                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/shattered-island.png')]"></div>
+                                    <div className="text-center z-10 text-seal-gold">
+                                        <div className="text-6xl mb-4 animate-bounce">🧧</div>
+                                        <p className="font-display font-bold text-xl uppercase tracking-widest">Flip Over</p>
+                                    </div>
+                                </div>
+
+                                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-xs font-medium text-white/90 uppercase tracking-widest">Flip Over</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ) : stage === 'back' ? (
+                        <motion.div
+                            key="back"
+                            initial={{ rotateY: -90, opacity: 0 }}
+                            animate={{ rotateY: 0, opacity: 1 }}
+                            exit={{
+                                rotateY: 90,
+                                opacity: 0,
+                                scale: 0.9,
+                                transition: { duration: 0.3, ease: "easeIn" }
+                            }}
+                            transition={{ duration: 0.4, type: "spring", stiffness: 100, damping: 15 }}
+                            className="cursor-pointer perspective-1000"
+                            onClick={() => setStage('result')}
+                            whileHover={{ scale: 1.05 }}
+                        >
+                            <div className="h-[400px] aspect-[363/680] rounded-lg relative flex items-center justify-center transition-all duration-300 shadow-xl group-hover:shadow-2xl overflow-hidden">
+                                <img
+                                    src="/envelope-back.png"
+                                    alt="Lucky Envelope Back"
+                                    className="absolute inset-0 w-full h-full object-cover object-top"
+                                    onError={(e) => {
+                                        // Fallback if missing back image
+                                        e.currentTarget.parentElement!.classList.add('w-64', 'bg-seal-red');
+                                        e.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-xs font-medium text-white/90 uppercase tracking-widest">Open Now</span>
                                 </div>
                             </div>
                         </motion.div>
                     ) : (
                         <motion.div
-                            key="receipt"
-                            initial={{ opacity: 0, scale: 0.5, rotateY: -180 }}
-                            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                            transition={{ duration: 0.6, type: "spring" }}
-                            className="flex flex-col items-center gap-6"
+                            key="result"
+                            initial={{ rotateY: -90, opacity: 0 }}
+                            animate={{
+                                rotateY: 0,
+                                opacity: 1,
+                                transition: { duration: 0.4, type: "spring", stiffness: 100, damping: 15 }
+                            }}
+                            className="flex flex-col items-center gap-6 perspective-1000"
                         >
                             <Receipt result={result} />
                             <motion.p
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1, transition: { delay: 1 } }}
+                                animate={{ opacity: 1, transition: { delay: 0.5 } }}
                                 className="text-seal-ivory/60 text-sm max-w-xs text-center"
                             >
                                 Or screenshot manually if sharing fails.
