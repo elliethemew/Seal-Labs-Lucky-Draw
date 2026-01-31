@@ -58,7 +58,7 @@ export function Layout({ children, className }: LayoutProps) {
             <header className="relative z-10 w-full px-8 py-8 md:px-10 flex justify-between items-center max-w-7xl mx-auto opacity-90">
                 <div className="flex items-center">
                     {/* Logo - Clickable Home Link */}
-                    <a href="/" className="flex items-center hover:opacity-80 transition-opacity cursor-pointer">
+                    <a href={import.meta.env.BASE_URL} className="flex items-center hover:opacity-80 transition-opacity cursor-pointer">
                         <img
                             src={`${import.meta.env.BASE_URL}logo.png`}
                             alt="Seal Labs"
